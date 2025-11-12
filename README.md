@@ -1,13 +1,13 @@
-# 🚀 **queuectl: A Persistent CLI Job Queue**
+# **queuectl: A Persistent CLI Job Queue**
 
-`queuectl` is a robust, **file-based job queue system** built in **Java**.  
+`queuectl` is a robust, **job queue system** built in **Java**.  
 It runs shell commands as background jobs, manages parallel workers, and gracefully handles failures with retries and a **Dead Letter Queue (DLQ)**.  
 
 It uses **SQLite** for persistence, **picocli** for the CLI, and **Javalin** for a live web dashboard.
 
 ---
 
-## ✨ **Features**
+## **Features**
 
 - **Persistent Storage** — Jobs are stored in an SQLite database (`queuectl.db`) and survive restarts.  
 - **Parallel Workers** — Run multiple worker threads (`worker start --count 5`) to process jobs concurrently.  
@@ -20,7 +20,7 @@ It uses **SQLite** for persistence, **picocli** for the CLI, and **Javalin** for
 
 ---
 
-## 🔄 **Job Lifecycle**
+## **Job Lifecycle**
 
 Jobs move through a clearly defined lifecycle managed by the workers:
 
@@ -38,7 +38,7 @@ Jobs move through a clearly defined lifecycle managed by the workers:
 
 ---
 
-## 🛠️ **Build & Run**
+## **Build & Run**
 
 ### **Prerequisites**
 - ☕ Java 11+
