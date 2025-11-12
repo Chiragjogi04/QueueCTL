@@ -59,7 +59,7 @@ alias queuectl="java -jar /full/path/to/your/queuectl/target/queuectl-1.0.0.jar"
 ```
 
 ## **CLI Command Reference**
-### dashboard
+### 1.dashboard
 Starts the live web dashboard.
 ```bash
 queuectl dashboard
@@ -69,37 +69,35 @@ Default runs on: http://localhost:7070 but if you want to change the port you ca
 queuectl dashboard --port 8080
 ```
 
-### worker
+### 2.worker
 Manages worker threads.
 ### Start 3 workers
 ```bash
 queuectl worker start --count 3
 ```
-
 ### Stop workers
 ```bash
 queuectl worker stop
 ```
 
-### enqueue
+### 3.enqueue
 Adds a job to the queue (in JSON).
 ### Simple job
 ```bash
 queuectl enqueue '{"id":"job1", "command":"echo Hello"}'
 ```
-
 ### Job with priority and timeout
 ```bash
 queuectl enqueue '{"command":"sleep 10", "priority":10, "timeout":60}'
 ```
 
-### status
+### 4.status
 Displays system status summary.
 ```bash
 queuectl status
 ```
 
-### list
+### 5.list
 Lists all jobs in a given state.
 ```bash
 queuectl list --state PENDING
@@ -109,19 +107,19 @@ queuectl list --state PENDING
 queuectl list --state FAILED
 ```
 
-### info
+### 6.info
 Shows details for a single job.
 ```bash
 queuectl info <job-id>
 ```
 
-### logs
+### 7.logs
 Prints the full log for a job.
 ```bash
 queuectl logs <job-id>
 ```
 
-### dlq
+### 8.dlq
 Manages the Dead Letter Queue.
 ### List all DEAD jobs
 ```bash
@@ -133,7 +131,7 @@ queuectl dlq list
 queuectl dlq retry <job-id>
 ```
 
-### config
+### 9.config
 Configure global settings.
 ### Set max retries
 ```bash
