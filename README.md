@@ -47,10 +47,10 @@ Jobs move through a clearly defined lifecycle managed by the workers:
 ### **1. Build**
 
 ```bash
-# Clone the repository and build the jar
 mvn clean package
 This creates:
 target/queuectl-1.0.0.jar
+```
 2. Set Up (Recommended)
 To make queuectl behave like a native command, add an alias:
 # Add this line to your .bashrc or .zshrc
