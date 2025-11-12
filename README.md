@@ -54,106 +54,81 @@ target/queuectl-1.0.0.jar
 
 ### **2. Set Up (Recommended)**
 To make queuectl behave like a native command, add an alias:
-# Add this line to your .bashrc or .zshrc
+### Add this line to your .bashrc or .zshrc
 ```bash
 alias queuectl="java -jar /full/path/to/your/queuectl/target/queuectl-1.0.0.jar"
 ```
 
-### **CLI Command Reference**
-# dashboard
+## **CLI Command Reference**
+### dashboard
 Starts the live web dashboard.
+```bash
 queuectl dashboard
-# Default: http://localhost:7070
+```
+Default runs on: http://localhost:7070 but if you want to change the port you can use below command,
+```bash
 queuectl dashboard --port 8080
-worker
-Manages worker threads.
-# Start 4 workers
-queuectl worker start --count 4
+```
 
-# Stop workers
+### worker
+Manages worker threads.
+### Start 3 workers
+queuectl worker start --count 3
+
+### Stop workers
 queuectl worker stop
 enqueue
 Adds a job to the queue (in JSON).
-# Simple job
+### Simple job
 queuectl enqueue '{"id":"job1", "command":"echo Hello"}'
 
-# Job with priority and timeout
+### Job with priority and timeout
 queuectl enqueue '{"command":"sleep 10", "priority":10, "timeout":60}'
-status
+### status
 Displays system status summary.
 queuectl status
-Output Example:
---- Worker Status ---
-Workers are RUNNING (PID: 12345)
 
---- Job Queue Status ---
-PENDING   : 10
-PROCESSING: 4
-FAILED    : 2
-COMPLETED : 52
-DEAD      : 1
-list
+### list
 Lists all jobs in a given state.
 queuectl list --state PENDING
 queuectl list --state FAILED
-info
+### info
 Shows details for a single job.
 queuectl info <job-id>
-Example Output:
---- Job Details ---
-ID:        test-timeout
-State:     DEAD
-Command:   sleep 20
-Priority:  0
-Attempts:  3 / 3
-Timeout:   2 seconds
-Created:   2025-11-12 11:30:00
-Updated:   2025-11-12 11:30:08
 
---- Last Output ---
-[ERROR] Job timed out after 2 seconds.
-logs
+### logs
 Prints the full log for a job.
 queuectl logs <job-id>
-Example Output:
---- Logs for test-timeout ---
 
---- ATTEMPT 1 at 2025-11-12 11:30:02 ---
-[ERROR] Job timed out after 2 seconds.
-
---- ATTEMPT 2 at 2025-11-12 11:30:04 ---
-[ERROR] Job timed out after 2 seconds.
-
---- ATTEMPT 3 at 2025-11-12 11:30:08 ---
-[ERROR] Job timed out after 2 seconds.
-dlq
+### dlq
 Manages the Dead Letter Queue.
-# List all DEAD jobs
+### List all DEAD jobs
 queuectl dlq list
 
-# Retry a job
+### Retry a job
 queuectl dlq retry <job-id>
 config
 Configure global settings.
-# Set max retries
+### Set max retries
 queuectl config set max-retries 5
 
-# Set backoff base
+### Set backoff base
 queuectl config set backoff-base 3
-📄 Job Specification
+
+## 📄 Job Specification
 Field	Type	Default	Description
 id	String	UUID	Unique job ID (auto-generated if omitted).
 command	String	Required	Shell command to execute.
 priority	Integer	0	Higher = runs earlier.
 timeout	Integer	300	Max seconds before killing the job.
 max_retries	Integer	3	Overrides global retry limit.
-🙏 Acknowledgements
+## 🙏 Acknowledgements
 This project was made possible thanks to the following libraries:
 ⚡ picocli — Type-safe CLI framework.
 🌐 Javalin — Lightweight web framework for the dashboard.
 💾 SQLite-JDBC — File-based database engine.
 📦 Jackson — Fast JSON parsing library.
-📚 Further Reading
+## 📚 Further Reading
 1️⃣ Conceptual Foundations (Queuing Theory)
 Erlang, A. K. (1909). The theory of probabilities and telephone conversations.
 Nyt Tidsskrift for Matematik B, 20, 33–39.
