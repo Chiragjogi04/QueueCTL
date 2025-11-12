@@ -154,7 +154,7 @@ max_retries	- Integer |	3	Overrides global retry limit.
 
 ## Tech Stack Used
 This project was made possible using the following libraries:
-⚡ **picocli** — Type-safe CLI framework.
-🌐 **Javalin** — Lightweight web framework for the dashboard.
-💾 **SQLite-JDBC** — File-based database engine.
-📦 **Jackson** — Fast JSON parsing library.
+- **picocli** — Type-safe CLI framework.
+- **Javalin** — Lightweight web framework for the dashboard.
+- **SQLite-JDBC** — File-based database engine.
+- **Jackson** — Fast JSON parsing library.
