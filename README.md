@@ -48,15 +48,19 @@ Jobs move through a clearly defined lifecycle managed by the workers:
 
 ```bash
 mvn clean package
+```
 This creates:
 target/queuectl-1.0.0.jar
-```
-2. Set Up (Recommended)
+
+### **2. Set Up (Recommended)**
 To make queuectl behave like a native command, add an alias:
 # Add this line to your .bashrc or .zshrc
+```bash
 alias queuectl="java -jar /full/path/to/your/queuectl/target/queuectl-1.0.0.jar"
-🕹️ CLI Command Reference
-dashboard
+```
+
+### **CLI Command Reference**
+# dashboard
 Starts the live web dashboard.
 queuectl dashboard
 # Default: http://localhost:7070
