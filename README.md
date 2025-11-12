@@ -50,7 +50,7 @@ Jobs move through a clearly defined lifecycle managed by the workers:
 mvn clean package
 ```
 This creates:
-target/queuectl-1.0.0.jar
+.jar file which is used to run the commands
 
 ### **2. Set Up (Recommended)**
 To make queuectl behave like a native command, add an alias:
