@@ -72,71 +72,94 @@ queuectl dashboard --port 8080
 ### worker
 Manages worker threads.
 ### Start 3 workers
+```bash
 queuectl worker start --count 3
+```
 
 ### Stop workers
+```bash
 queuectl worker stop
-enqueue
+```
+
+### enqueue
 Adds a job to the queue (in JSON).
 ### Simple job
+```bash
 queuectl enqueue '{"id":"job1", "command":"echo Hello"}'
+```
 
 ### Job with priority and timeout
+```bash
 queuectl enqueue '{"command":"sleep 10", "priority":10, "timeout":60}'
+```
+
 ### status
 Displays system status summary.
+```bash
 queuectl status
+```
 
 ### list
 Lists all jobs in a given state.
+```bash
 queuectl list --state PENDING
+```
+
+```bash
 queuectl list --state FAILED
+```
+
 ### info
 Shows details for a single job.
+```bash
 queuectl info <job-id>
+```
 
 ### logs
 Prints the full log for a job.
+```bash
 queuectl logs <job-id>
+```
 
 ### dlq
 Manages the Dead Letter Queue.
 ### List all DEAD jobs
+```bash
 queuectl dlq list
+```
 
 ### Retry a job
+```bash
 queuectl dlq retry <job-id>
-config
+```
+
+### config
 Configure global settings.
 ### Set max retries
+```bash
 queuectl config set max-retries 5
+```
 
 ### Set backoff base
+```bash
 queuectl config set backoff-base 3
+```
 
 ## 📄 Job Specification
-Field	Type	Default	Description
-id	String	UUID	Unique job ID (auto-generated if omitted).
-command	String	Required	Shell command to execute.
-priority	Integer	0	Higher = runs earlier.
-timeout	Integer	300	Max seconds before killing the job.
-max_retries	Integer	3	Overrides global retry limit.
+| Field	Type |  Default	Description |
+|:------|:-------------|
+id - String | UUID	Unique job ID (auto-generated if omitted).
+command	- String	| Required	Shell command to execute.
+priority - Integer |	Higher = runs earlier.
+timeout -	Integer |	300	Max seconds before killing the job.
+max_retries	- Integer |	3	Overrides global retry limit.
+
 ## 🙏 Acknowledgements
 This project was made possible thanks to the following libraries:
-⚡ picocli — Type-safe CLI framework.
-🌐 Javalin — Lightweight web framework for the dashboard.
-💾 SQLite-JDBC — File-based database engine.
-📦 Jackson — Fast JSON parsing library.
+⚡ **picocli** — Type-safe CLI framework.
+🌐 **Javalin** — Lightweight web framework for the dashboard.
+💾 **SQLite-JDBC** — File-based database engine.
+📦 **Jackson** — Fast JSON parsing library.
+
 ## 📚 Further Reading
-1️⃣ Conceptual Foundations (Queuing Theory)
-Erlang, A. K. (1909). The theory of probabilities and telephone conversations.
-Nyt Tidsskrift for Matematik B, 20, 33–39.
-Harchol-Balter, M. (2013). Performance Modeling and Design of Computer Systems: Queueing Theory in Action. Cambridge University Press.
-2️⃣ Operating System Scheduling
-Silberschatz, A., Galvin, P. B., & Gagne, G. (2018). Operating System Concepts (10th ed.). Wiley.
-3️⃣ Modern System Design Patterns
-Hohpe, G., & Woolf, B. (2003). Enterprise Integration Patterns. Addison-Wesley.
-Richardson, C. (2018). Microservices Patterns. Manning.
-💡 Author
-queuectl — A Modern Java CLI Job Queue System for Distributed Automation.
-Maintained with ❤️ by [Your Name / Team].
+
