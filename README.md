@@ -152,12 +152,9 @@ priority - Integer |	Higher = runs earlier.
 timeout -	Integer |	300	Max seconds before killing the job.
 max_retries	- Integer |	3	Overrides global retry limit.
 
-## 🙏 Acknowledgements
-This project was made possible thanks to the following libraries:
+## Tech Stack Used
+This project was made possible using the following libraries:
 ⚡ **picocli** — Type-safe CLI framework.
 🌐 **Javalin** — Lightweight web framework for the dashboard.
 💾 **SQLite-JDBC** — File-based database engine.
 📦 **Jackson** — Fast JSON parsing library.
-
-## 📚 Further Reading
-
