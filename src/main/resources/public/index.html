@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QueueCTL Dashboard</title>
+  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  
+  <style>
+    body {
+      background: #ffffff;
+      color: #111111;
+      font-family: "Inter", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    main.container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      border-bottom: 2px solid #000;
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    header h2 {
+      font-size: 2rem;
+      margin-bottom: 0.25rem;
+      color: #000;
+    }
+
+    header p {
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    a {
+      color: #000;
+      text-decoration: underline;
+    }
+
+    h3 {
+      font-weight: 600;
+      border-bottom: 1px solid #000;
+      padding-bottom: 0.4rem;
+      margin-bottom: 1rem;
+    }
+
+    #status-grid, #job-lists {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .status-box {
+      border: 1px solid #000;
+      border-radius: 0.5rem;
+      padding: 1.2rem;
+      text-align: center;
+      background: #fff;
+      transition: background 0.2s ease;
+    }
+
+    .status-box:hover {
+      background: #f3f3f3;
+    }
+
+    .status-box .label {
+      font-weight: 700;
+      font-size: 1em;
+      margin-bottom: 0.4rem;
+      display: block;
+    }
+
+    .status-box .count {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .status-running { color: #000; }
+    .status-stopped { color: #777; }
+    .status-dead { color: #930000; }
+    .status-processing { color: #000; }
+    .status-pending { color: #555; }
+    .status-completed { color: #000; }
+    .status-failed { color: #b30000; }
+
+    article {
+      border: 1px solid #000;
+      border-radius: 0.5rem;
+      background: #fff;
+      padding: 1rem;
+      transition: background 0.2s ease;
+    }
+
+    article:hover {
+      background: #f7f7f7;
+    }
+
+    article h4 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      border-bottom: 1px solid #000;
+      padding-bottom: 0.3rem;
+    }
+
+    .job-list {
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .job-item {
+      border-bottom: 1px solid #ddd;
+      padding: 0.75rem 0;
+    }
+
+    .job-item:last-child {
+      border-bottom: none;
+    }
+
+    .job-item strong {
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: #000;
+      display: block;
+    }
+
+    .job-item small {
+      font-size: 0.85rem;
+      color: #555;
+      display: block;
+      word-break: break-all;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #aaa;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #777;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <header>
+      <h2>QueueCTL Dashboard</h2>
+    </header>
+
+    <section id="status-section">
+      <h3>System Status</h3>
+      <div id="status-grid"></div>
+    </section>
+
+    <section id="jobs-section">
+      <h3>Job Queues</h3>
+      <div id="job-lists"></div>
+    </section>
+  </main>
+
+  <script>
+
+    const API_URLS = {
+      status: '/api/status',
+      pending: '/api/jobs/pending',
+      processing: '/api/jobs/processing',
+      failed: '/api/jobs/failed',
+      completed: '/api/jobs/completed',
+      dead: '/api/jobs/dead'
+    };
+    const JOB_LIST_TYPES = ['pending', 'processing', 'failed', 'completed', 'dead'];
+
+    function getStatusClass(status) {
+      const map = {
+        'RUNNING': 'status-running',
+        'STOPPED': 'status-stopped',
+        'PENDING': 'status-pending',
+        'PROCESSING': 'status-processing',
+        'FAILED': 'status-failed',
+        'COMPLETED': 'status-completed',
+        'DEAD': 'status-dead'
+      };
+      return map[status] || '';
+    }
+
+    function renderStatus(data) {
+      const grid = document.getElementById('status-grid');
+      const workerStatus = data.WORKERS_RUNNING ? 'RUNNING' : 'STOPPED';
+      const workerStatusClass = getStatusClass(workerStatus);
+
+      let html = `
+        <article class="status-box">
+          <span class="label ${workerStatusClass}">${workerStatus}</span>
+          <div class="count ${workerStatusClass}">Workers</div>
+        </article>
+      `;
+
+      html += JOB_LIST_TYPES.map(type => {
+        const count = data[type.toUpperCase()] || 0;
+        const statusClass = getStatusClass(type.toUpperCase());
+        return `
+          <article class="status-box">
+            <span class="label ${statusClass}">${type.toUpperCase()}</span>
+            <div class="count ${statusClass}">${count}</div>
+          </article>
+        `;
+      }).join('');
+
+      grid.innerHTML = html;
+    }
+
+    function renderJobList(type, jobs) {
+      const statusClass = getStatusClass(type.toUpperCase());
+      const jobsHtml = jobs.length ? jobs.map(job => `
+        <div class="job-item">
+          <strong>${job.id}</strong>
+          <small>Cmd: ${job.command}</small>
+          <small>Attempts: ${job.attempts} | Prio: ${job.priority || 'N/A'}</small>
+        </div>
+      `).join('') : '<p style="color:#777;">No jobs found.</p>';
+
+      return `
+        <article>
+          <h4 class="${statusClass}">${type.toUpperCase()}</h4>
+          <div class="job-list">${jobsHtml}</div>
+        </article>
+      `;
+    }
+
+    async function fetchData() {
+      try {
+        const responses = await Promise.all([
+          fetch(API_URLS.status),
+          ...JOB_LIST_TYPES.map(type => fetch(API_URLS[type]))
+        ]);
+        for (const res of responses) if (!res.ok) throw new Error(`Failed: ${res.url}`);
+        
+        const [statusData, pendingJobs, processingJobs, failedJobs, completedJobs, deadJobs] = await Promise.all(responses.map(r => r.json()));
+        
+        renderStatus(statusData);
+        
+        const jobListsGrid = document.getElementById('job-lists');
+        
+        jobListsGrid.innerHTML = `
+          ${renderJobList('pending', pendingJobs)}
+          ${renderJobList('processing', processingJobs)}
+          ${renderJobList('failed', failedJobs)} 
+          ${renderJobList('completed', completedJobs)}
+          ${renderJobList('dead', deadJobs)}
+        `;
+      } catch (error) {
+        console.error(error);
+        document.body.innerHTML = '<main><h2 style="color:#900;">Error fetching data. Server offline?</h2></main>';
+      }
+    }
+    
+
+    fetchData();
+    setInterval(fetchData, 2000);
+  </script>
+</body>
+</html>
