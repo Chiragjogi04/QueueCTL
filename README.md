@@ -54,7 +54,6 @@ This creates:
 
 ### **2. Set Up (Recommended)**
 To make queuectl behave like a native command, add an alias:
-### Add this line to your .bashrc or .zshrc
 ```bash
 alias queuectl="java -jar /full/path/to/your/queuectl/target/queuectl-1.0.0.jar"
 ```
